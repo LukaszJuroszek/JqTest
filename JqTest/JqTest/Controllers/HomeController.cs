@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JqTest.DAL;
+using JqTest.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +13,20 @@ namespace JqTest.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        public JsonResult GetPersons()
+        {
+            using (var context = new JqContext())
+            {
+                var people = context.People.ToList();
+                var model = new DataTable
+                {
+                    data = people,
+                    recordsTotal = people.Count()
+                };
+                return new JsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+            }
         }
 
         public ActionResult About()

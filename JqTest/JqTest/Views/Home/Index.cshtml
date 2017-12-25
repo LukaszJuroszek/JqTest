@@ -16,6 +16,7 @@
                     <td>Id</td>
                     <td>FristName</td>
                     <td>SecondName</td>
+                    <td>CreatedAt</td>
                 </tr>
             </thead>
         </table>
@@ -23,8 +24,28 @@
 </div>
 @section scripts {
     <script type="text/javascript">
-            $(document).ready(function () {
-                $("#jqDateTable").dataTable();
+            var filterValues = {};
+        $(document).ready(function () {
+            $("#jqDateTable").dataTable({
+                serverSide: true,
+                bFilter: true,
+                columns: [
+                    { data: "Id" },
+                    { data: "FirstName" },
+                    { data: "SecondName" },
+                    { data: "CreatedAt" }
+                ],
+                ajax: function (data, callback, settings) {
+                    filterValues.draw = data.draw;
+                    filterValues.start = data.start;
+                    filterValues.length = data.length;
+                    $.ajax({
+                        url: '/Home/GetPersons',
+                        method: 'GET',
+                        data: filterValues
+                    }).done(callback);
+                }
             });
+        });
     </script>
 }
