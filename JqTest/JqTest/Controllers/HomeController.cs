@@ -1,6 +1,7 @@
 ﻿using JqTest.DAL;
 using JqTest.Models;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -33,6 +34,40 @@ namespace JqTest.Controllers
         }
 
         [HttpPost]
+        public ActionResult DeletePerson(int id)
+        {
+            try
+            {
+                using (var context = new JqContext())
+                {
+                    var person = context.People.SingleOrDefault(x => x.Id == id);
+                    if (person != null)
+                    {
+                        context.Entry(person).State = EntityState.Deleted;
+                        context.SaveChanges();
+                        return Json(new { success = true, msg = "Successfully deleted person with id: " + id }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            msg = $"Person with id: {id} dont exist"
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    success = false,
+                    msg = e.ToString()
+                }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
         public ActionResult AddPerson(Person model)
         {
             try
@@ -49,7 +84,7 @@ namespace JqTest.Controllers
             {
                 return Json(new { success = false, msg = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
-           
+
         }
 
         public ActionResult About()

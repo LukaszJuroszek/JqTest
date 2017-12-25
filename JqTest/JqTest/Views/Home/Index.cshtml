@@ -19,6 +19,7 @@
                     <td>SecondName</td>
                     <td>CreatedAt</td>
                     <td>Edit</td>
+                    <td>Delete</td>
                 </tr>
             </thead>
         </table>
@@ -28,12 +29,11 @@
     <script type="text/javascript">
         var filterValues = {};
         var table;
-        $(document).ready(function () {
-         table = $("#jqDateTable").dataTable({
+        function init(){
+            table = $("#jqDateTable").DataTable({
                 serverSide: true,
                 bFilter: true,
                 processing: true,
-                cashe: false,
                 columns: [
                     { data: "Id" },
                     { data: "FirstName" },
@@ -43,7 +43,14 @@
                         "title": "Edit",
                         "data": "Id",
                         "render": function (data, type, full, meta) {
-                            return '<a href="@Url.Action("EditPerson", "Home")?id='+data+'">Edit</a>';
+                            return '<button class="btn btn-info href="@Url.Action("EditPerson", "Home")?id=' + data +'>Edit</button>';
+                        }
+                    },
+                    {
+                        "title": "Delete",
+                        "data": "Id",
+                        "render": function (data, type, full, meta) {
+                            return '<button class="btn btn-warning personDeleteButton" value=' + data + '>Delete</button>';
                         }
                     }
                 ],
@@ -58,9 +65,30 @@
                     }).done(callback);
                 }
             });
+        }
+
+        $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/Home/DeletePerson",
+                data: '{id: ' +this.value + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    table.draw();
+                },
+                failure: function (response) {
+                    alert(response.json());
+                },
+                error: function (response) {
+                    alert(response.json());
+                }
+            });
         });
 
-        $("#btnSubmittAddPerson").click(function () {
+       $("#btnSubmittAddPerson").click(function (e) {
+            e.preventDefault();
             var model = {};
             model.FirstName = $('#FirstName').val();
             model.SecondName = $('#SecondName').val();
@@ -72,6 +100,7 @@
                 dataType: "json",
                 success: function (response) {
                     $('#addModal').modal('toggle');
+                    table.draw();
                 },
                 failure: function (response) {
                     alert(response.json());
@@ -81,10 +110,19 @@
                 }
             });
         });
+
         $("#showAddPersonModal").click(function () {
             $('#addModal').modal('show'); });
 
         $("#btnCancelAddPerson").click(function () {
-            $('#addModal').modal('toggle'); });
+            $('#addModal').modal('toggle');
+        });
+
+        $('#addModal').on('hidden.bs.modal', function () {
+            $(this).find("#FirstName,#SecondName").val('').end();
+        });
+
+        $(document).ready(init());
+      
     </script>
 }
