@@ -70,7 +70,7 @@
         $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
             e.preventDefault();
             $.ajax({
-                type: "POST",
+                type: "DELETE",
                 url: "/Home/DeletePerson",
                 data: '{id: ' +this.value + '}',
                 contentType: "application/json; charset=utf-8",
@@ -123,6 +123,6 @@
         });
 
         $(document).ready(init());
-      
+
     </script>
 }

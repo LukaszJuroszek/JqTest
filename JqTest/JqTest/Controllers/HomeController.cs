@@ -1,6 +1,7 @@
 ﻿using JqTest.DAL;
 using JqTest.Models;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -18,8 +19,14 @@ namespace JqTest.Controllers
         {
             using (var context = new JqContext())
             {
-                var people = context.People.ToList();
-                var model = new DataTable
+                var people = context.People.ToList().Select(x =>
+                new {
+                    Id = x.Id,
+                    FirstName = x.FirstName,
+                    SecondName = x.SecondName,
+                    CreatedAt = x.CreatedAt.ToShortDateString()
+                }).ToList();
+                var model = new 
                 {
                     data = people,
                     recordsTotal = people.Count()
@@ -33,7 +40,7 @@ namespace JqTest.Controllers
             return null;
         }
 
-        [HttpPost]
+        [HttpDelete]
         public ActionResult DeletePerson(int id)
         {
             try
@@ -45,25 +52,17 @@ namespace JqTest.Controllers
                     {
                         context.Entry(person).State = EntityState.Deleted;
                         context.SaveChanges();
-                        return Json(new { success = true, msg = "Successfully deleted person with id: " + id }, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = true, msg = $"Successfully deleted person with id:{id}" }, JsonRequestBehavior.AllowGet);
                     }
                     else
                     {
-                        return Json(new
-                        {
-                            success = false,
-                            msg = $"Person with id: {id} dont exist"
-                        }, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = false, msg = $"Person with id: {id} dont exist" }, JsonRequestBehavior.AllowGet);
                     }
                 }
             }
             catch (Exception e)
             {
-                return Json(new
-                {
-                    success = false,
-                    msg = e.ToString()
-                }, JsonRequestBehavior.AllowGet);
+                return Json(new { success = false, msg = e.ToString() }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -77,7 +76,7 @@ namespace JqTest.Controllers
                     model.CreatedAt = DateTime.Now;
                     context.People.Add(model);
                     context.SaveChanges();
-                    return Json(new { success = true, msg = "Successfully added " + model.FirstName }, JsonRequestBehavior.AllowGet);
+                    return Json(new { success = true, msg = $"Successfully added {model.FirstName}" }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception e)
