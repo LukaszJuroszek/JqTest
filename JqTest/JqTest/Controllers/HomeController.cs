@@ -15,18 +15,31 @@ namespace JqTest.Controllers
             return View();
         }
 
+        public ActionResult GetEditedPerson(int id)
+        {
+            using (var context = new JqContext())
+            {
+                var model = context.People.FirstOrDefault(x => x.Id == id);
+                if (model != null)
+                    return PartialView("EditPerson", model);
+                else
+                    return Json(new { success = false, msg = $"Person with id: {id} dont exist" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult GetPersons()
         {
             using (var context = new JqContext())
             {
                 var people = context.People.ToList().Select(x =>
-                new {
+                new
+                {
                     Id = x.Id,
                     FirstName = x.FirstName,
                     SecondName = x.SecondName,
                     CreatedAt = x.CreatedAt.ToShortDateString()
                 }).ToList();
-                var model = new 
+                var model = new
                 {
                     data = people,
                     recordsTotal = people.Count()
@@ -35,9 +48,29 @@ namespace JqTest.Controllers
             }
         }
 
-        public ActionResult EditPerson(int id)
+        [HttpPost]
+        public ActionResult EditPerson(Person model)
         {
-            return null;
+            using (var context = new JqContext())
+            {
+                var person = context.People.FirstOrDefault(x => x.Id == model.Id);
+                if (person != null)
+                {
+                    try
+                    {
+                        person.FirstName = model.FirstName;
+                        person.SecondName = model.SecondName;
+                        context.SaveChanges();
+                        return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+                    }
+                    catch (Exception e)
+                    {
+                        return Json(new { success = false, msg = e.ToString()}, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                    return Json(new { success = false, msg = $"Person with id: {model.Id} dont exist" }, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpDelete]

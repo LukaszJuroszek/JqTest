@@ -1,0 +1,33 @@
+﻿@model JqTest.Models.Person
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Edit Person</h4>
+        </div>
+        <div class="modal-body">
+            @Html.AntiForgeryToken()
+            <form class="editPersonForm">
+                <input id="Id" type="hidden" name="Id" value="@Model.Id">
+                <div class="form-group">
+                    <label for="FirstName">FirstName</label>
+                    <input id="FirstName"  type="text" name="FirstName" class="form-control" value=@Model.FirstName>
+                </div>
+                <div class="form-group">
+                    <label for="SecondName">SecondName</label>
+                    <input id="SecondName" type="text" name="SecondName" class="form-control" value=@Model.SecondName>
+                </div>
+                <div class="modal-footer">
+                    <div class="col-md-offset-2 col-md-2">
+                        <input id="btnSubmittEditPerson" type="submit" value="Update" class="btn btn-default" />
+                    </div>
+                    <div class="col-md-offset-4 col-md-2">
+                        <button id="btnCancelEditPerson" type="button" class="btn btn-default">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
