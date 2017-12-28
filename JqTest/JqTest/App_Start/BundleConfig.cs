@@ -13,6 +13,7 @@ namespace JqTest
             bundles.Add(new ScriptBundle("~/bundles/viewScripts").Include(
                   "~/Scripts/views/index.js",
                   "~/Scripts/views/editPerson.js",
+                  "~/Scripts/views/deletePerson.js",
                   "~/Scripts/views/addPerson.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(

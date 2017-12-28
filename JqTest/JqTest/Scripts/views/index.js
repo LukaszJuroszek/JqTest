@@ -1,5 +1,4 @@
-﻿var filterValues = {};
-var table;
+﻿var table;
 
 function init() {
     table = $("#jqDateTable").DataTable({
@@ -38,26 +37,6 @@ function init() {
         }
     });
 }
-
-$("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
-    e.preventDefault();
-    $.ajax({
-        type: "DELETE",
-        url: "/Home/DeletePerson",
-        data: '{id: ' + this.value + '}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            table.ajax.reload(null, false);
-        },
-        failure: function (response) {
-            alert(response.json());
-        },
-        error: function (response) {
-            alert(response.json());
-        }
-    });
-});
 
 $(document).ready(init());
 

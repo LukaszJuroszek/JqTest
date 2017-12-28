@@ -422,6 +422,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\views\addPerson.js" />
+    <Content Include="Scripts\views\deletePerson.js" />
     <Content Include="Scripts\views\editPerson.js" />
     <Content Include="Scripts\views\index.js" />
     <Content Include="Web.config" />
@@ -441,6 +442,7 @@
     <Content Include="Views\Home\AddPerson.cshtml" />
     <Content Include="Views\Home\EditPerson.cshtml" />
     <Content Include="Views\Shared\_ModalLayout.cshtml" />
+    <Content Include="Views\Home\DeletePerson.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

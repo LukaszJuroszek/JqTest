@@ -15,13 +15,13 @@ namespace JqTest.Controllers
             return View();
         }
 
-        public ActionResult GetEditedPerson(int id)
+        public ActionResult GetPerson(int id, string partialViewName)
         {
             using (var context = new JqContext())
             {
                 var model = context.People.FirstOrDefault(x => x.Id == id);
                 if (model != null)
-                    return PartialView("EditPerson", model);
+                    return PartialView(partialViewName, model);
                 else
                     return Json(new { success = false, msg = $"Person with id: {id} dont exist" }, JsonRequestBehavior.AllowGet);
             }

@@ -1,0 +1,18 @@
+﻿@model JqTest.Models.Person
+@{
+    Layout = "~/Views/Shared/_ModalLayout.cshtml";
+}
+<form class="addPersonForm form-horizontal">
+    <h4>Do you want to delete ?</h4>
+    <input id="Id" type="hidden" name="Id" value="@Model.Id">
+    <div class="form-group">
+        <label for="FirstName" class="col-sm-3 control-label">FirstName:</label>
+        <label class="col-sm-2 control-label">@Model.FirstName</label>
+        <label for="SecondName" class="col-sm-3 control-label">SecondName:</label>
+        <label class="col-sm-2 control-label">@Model.SecondName</label>
+    </div>
+    <div class="row">
+        <button id="btnSubmittDeletePerson" type="submit" class="btn btn-danger col-sm-4">Yes</button>
+        <button id="btnCancelDeletePerson" type="button" class="btn btn-info col-sm-4 col-sm-offset-4">No</button>
+    </div>
+</form>

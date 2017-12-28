@@ -25,7 +25,7 @@
 });
 
 $("#jqDateTable").on('click', 'button.personEditButton', function (e) {
-    $('#editPersonModal').load('/Home/GetEditedPerson?id=' + this.value);
+    $('#editPersonModal').load('/Home/GetPerson?id=' + this.value +'&partialViewName=EditPerson');
     $('#editPersonModal').modal('show');
 });
 
