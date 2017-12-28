@@ -1,35 +1,23 @@
 ﻿@model JqTest.Models.Person
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4>Add Person</h4>
-        </div>
-        <div class="modal-body">
-            @Html.AntiForgeryToken()
-            <form class="addPersonForm">
-                <div class="form-group">
-                    <label for="FirstName">FirstName</label>
-                    <input type="text" class="form-control" id="FirstName" placeholder="Enter FirstName">
-                </div>
-                <div class="form-group">
-                    <label for="SecondName">SecondName</label>
-                    <input type="text" class="form-control" id="SecondName" placeholder="Enter SecondName">
-                </div>
-                <div class="modal-footer">
-                    <div class="col-md-offset-2 col-md-2">
-                        <input id="btnSubmittAddPerson" type="submit" value="Create" class="btn btn-default" />
-                    </div>
-                    <div class="col-md-offset-4 col-md-2">
-                        <button id="btnCancelAddPerson" type="button" class="btn btn-default">Close</button>
-                    </div>
-                </div>
-            </form>
+@{
+    Layout = "~/Views/Shared/_ModalLayout.cshtml";
+}
+<form class="addPersonForm form-horizontal">
+    <h4>Add Person</h4>
+    <div class="form-group">
+        <label for="FirstName" class="col-sm-3 control-label">FirstName</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control col-sm-12" id="FirstName" placeholder="Enter FirstName">
         </div>
     </div>
-</div>
-<div id="loader" style="display:none">
-    Loading...
-</div>
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+    <div class="form-group">
+        <label for="SecondName" class="col-sm-3 control-label">SecondName</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="SecondName" placeholder="Enter SecondName">
+        </div>
+    </div>
+    <div class="row">
+        <button id="btnSubmittAddPerson" type="submit" class="btn btn-default col-sm-4">Create</button>
+        <button id="btnCancelAddPerson" type="button" class="btn btn-default col-sm-4 col-sm-offset-4">Close</button>
+    </div>
+</form>

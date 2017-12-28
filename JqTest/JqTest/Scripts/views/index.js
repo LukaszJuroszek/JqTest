@@ -34,17 +34,10 @@ function init() {
             }).done(callback);
         },
         initComplete: function () {
-            $('#jqDateTable > thead > tr> td').each(function (i) {
-                if (i < 4) {
-                    var title = $('#jqDateTable > thead > tr').find('td:eq(' + i + ')').text();
-                    $('#searchInputsWrapper').append('<input  class="col-md-3 form-control" type="text" placeholder="' + title + '" data-index="' + i + '" />');
-                }
-            });
-
             $('#jqDateTable_filter').hide();
         }
     });
- }
+}
 
 $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
     e.preventDefault();
@@ -56,7 +49,6 @@ $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
         dataType: "json",
         success: function (response) {
             table.ajax.reload(null, false);
-
         },
         failure: function (response) {
             alert(response.json());
@@ -69,7 +61,12 @@ $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
 
 $(document).ready(init());
 
-$('#searchInputsWrapper').on('keyup', 'input', function () {
+$('#jqDateTable > tfoot > tr >').each(function (i) {
+    var title = $(this).text();
+    $(this).html('<input type="text" class="col-md-3 form-control" placeholder="' + title + '" data-index="' + i + '" />');
+});
+
+$('tfoot').on('keyup', 'input', function () {
     table.column($(this).data('index'))
         .search(this.value)
         .draw();
