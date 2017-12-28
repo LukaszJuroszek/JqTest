@@ -10,6 +10,10 @@ namespace JqTest
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new ScriptBundle("~/bundles/viewScripts").Include(
+                  "~/Scripts/views/index.js",
+                  "~/Scripts/views/editPerson.js",
+                  "~/Scripts/views/addPerson.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));

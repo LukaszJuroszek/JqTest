@@ -2,7 +2,7 @@
     ViewBag.Title = "Home Page";
 }
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <button id="showAddPersonModal" type="button" class="btn btn-info btn-lg" data-target="#addModal">Add Person</button>
         <div class="modal fade" id="addModal">
             @Html.Partial("AddPerson")
@@ -11,6 +11,9 @@
             @Html.Partial("EditPerson", new JqTest.Models.Person())
         </div>
     </div>
+</div>
+<div  id="searchInputsWrapper" class="row">
+    <div class="col-md-12" ></div>
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -28,140 +31,3 @@
         </table>
     </div>
 </div>
-@section scripts {
-    <script type="text/javascript">
-        var filterValues = {};
-        var table;
-        function init() {
-            table = $("#jqDateTable").DataTable({
-                serverSide: true,
-                bFilter: true,
-                processing: true,
-                columns: [
-                    { data: "Id" },
-                    { data: "FirstName" },
-                    { data: "SecondName" },
-                    { data: "CreatedAt" },
-                    {
-                        title: "Edit",
-                        data: "Id",
-                        render: function (data, type, full, meta) {
-                            return '<button class="btn btn-info personEditButton" data-target="#editPersonModal" value=' + data + '>Edit</button>';
-                        }
-                    },
-                    {
-                        title: "Delete",
-                        data: "Id",
-                        render: function (data, type, full, meta) {
-                            return '<button class="btn btn-warning personDeleteButton" value=' + data + '>Delete</button>';
-                        }
-                    }
-                ],
-                ajax: function (data, callback, settings) {
-                    filterValues.draw = data.draw;
-                    filterValues.start = data.start;
-                    filterValues.length = data.length;
-                    $.ajax({
-                        url: '/Home/GetPersons',
-                        method: 'GET',
-                        data: filterValues
-                    }).done(callback);
-                }
-            });
-        }
-
-        $("#jqDateTable").on('click', 'button.personEditButton', function (e) {
-            $('#editPersonModal').modal('show');
-            $('#editPersonModal').load('@Url.Action("GetEditedPerson", "Home")?id=' + this.value + '');
-        });
-
-        $("#editPersonModal").on('click', '#btnCancelEditPerson', function (e) {
-            $('#editPersonModal').modal('toggle');
-        });
-
-        $("#editPersonModal").on('click', '#btnSubmittEditPerson',function (e) {
-            e.preventDefault();
-            var modal = $("#editPersonModal");
-            var model = {};
-            model.Id = modal.find('#Id').val();
-            model.FirstName = modal.find('#FirstName').val();
-            model.SecondName = modal.find('#SecondName').val();
-            $.ajax({
-                type: "POST",
-                url: "/Home/EditPerson",
-                data: '{model: ' + JSON.stringify(model) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    $('#editPersonModal').modal('toggle');
-                    table.draw();
-                },
-                failure: function (response) {
-                    alert(response.json());
-                },
-                error: function (response) {
-                    alert(response.json());
-                }
-            });
-        });
-
-        $("#jqDateTable").on('click', 'button.personDeleteButton', function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: "DELETE",
-                url: "/Home/DeletePerson",
-                data: '{id: ' + this.value + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    table.draw();
-                },
-                failure: function (response) {
-                    alert(response.json());
-                },
-                error: function (response) {
-                    alert(response.json());
-                }
-            });
-        });
-
-        $("#btnSubmittAddPerson").click(function (e) {
-            e.preventDefault();
-            var model = {};
-            model.FirstName = $('#FirstName').val();
-            model.SecondName = $('#SecondName').val();
-            $.ajax({
-                type: "POST",
-                url: "/Home/AddPerson",
-                data: '{model: ' + JSON.stringify(model) + '}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (response) {
-                    $('#addModal').modal('toggle');
-                    table.draw();
-                },
-                failure: function (response) {
-                    alert(response.json());
-                },
-                error: function (response) {
-                    alert(response.json());
-                }
-            });
-        });
-
-        $("#showAddPersonModal").click(function () {
-            $('#addModal').modal('show');
-        });
-
-        $("#btnCancelAddPerson").click(function () {
-            $('#addModal').modal('toggle');
-        });
-
-        $('#addModal').on('hidden.bs.modal', function () {
-            $(this).find("#FirstName,#SecondName").val('').end();
-        });
-
-        $(document).ready(init());
-
-    </script>
-}

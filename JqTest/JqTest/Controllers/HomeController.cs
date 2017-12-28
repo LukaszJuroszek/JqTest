@@ -27,6 +27,7 @@ namespace JqTest.Controllers
             }
         }
 
+        [HttpPost]
         public JsonResult GetPersons()
         {
             using (var context = new JqContext())
@@ -39,12 +40,7 @@ namespace JqTest.Controllers
                     SecondName = x.SecondName,
                     CreatedAt = x.CreatedAt.ToShortDateString()
                 }).ToList();
-                var model = new
-                {
-                    data = people,
-                    recordsTotal = people.Count()
-                };
-                return new JsonResult { Data = model, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                return Json(new { recordsTotal = people.Count(), data = people }, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -61,11 +57,11 @@ namespace JqTest.Controllers
                         person.FirstName = model.FirstName;
                         person.SecondName = model.SecondName;
                         context.SaveChanges();
-                        return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = true }, JsonRequestBehavior.AllowGet);
                     }
                     catch (Exception e)
                     {
-                        return Json(new { success = false, msg = e.ToString()}, JsonRequestBehavior.AllowGet);
+                        return Json(new { success = false, msg = e.ToString() }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
